@@ -7,7 +7,7 @@ import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
     <Routes>
-      <Route element={<PrivateRoute isAuth={false} />}>
+      <Route element={<PrivateRoute />}>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
       </Route>

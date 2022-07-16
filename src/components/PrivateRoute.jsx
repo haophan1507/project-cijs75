@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
-function PrivateRoute({ isAuth }) {
+function PrivateRoute() {
+  const authCtx = useContext(AuthContext)
+
   return (
-    isAuth ? <Outlet /> : <Navigate to='login' />
+    authCtx.auth ? <Outlet /> : <Navigate to='login' />
   )
 }
 

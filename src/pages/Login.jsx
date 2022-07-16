@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { Row, Col, Image, Typography, Form, Input, Button } from 'antd'
+import { Row, Col, Image, Typography, Form, Input, Button, notification } from 'antd'
+import axios from 'axios'
+import { AuthContext } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
+import { MeContext } from '../context/MeContext'
 
 const Container = styled.div`
   height: 100vh;
@@ -23,8 +27,39 @@ const FormLogin = styled(Col)`
 
 function Login() {
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const authCtx = useContext(AuthContext);
+  const meCtx = useContext(MeContext);
+  const navigate = useNavigate();
+
+  const onFinish = async (valueForm) => {
+    try {
+      const allUser = await (await axios.get('https://cijs75-default-rtdb.asia-southeast1.firebasedatabase.app/user.json')).data
+
+
+      const user = Object.values(allUser).find((valueApi) => {
+        return valueApi.username === valueForm.username && valueApi.password === valueForm.password
+      })
+
+      if (user) {
+        authCtx.setAuth(true)
+        meCtx.setUserInfo({ ...user })
+        navigate("/home", { replace: true });
+        console.log('dang nhap thanh cong');
+      } else {
+        notification.open({
+          message: 'Loi',
+          description:
+            'Dang nhap that bai',
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      }
+    } catch (error) {
+
+    }
+
+    // console.log('Success:', valueForm);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -60,8 +95,6 @@ function Login() {
                   name="username"
                   rules={[
                     { required: true, message: 'Please input your username!' },
-                    { min: 6, message: 'Nhap them di ong oi' },
-                    { pattern: new RegExp(/^\S+@\S+\.\S+$/), message: 'khong phai email' },
                   ]}
                 >
                   <Input />
