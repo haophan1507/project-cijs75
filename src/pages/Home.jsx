@@ -1,8 +1,7 @@
 import { Menu } from 'antd';
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import { MeContext } from '../context/MeContext';
-
-
+import ListProduct from './ListProduct';
 
 function Home() {
   const meCtx = useContext(MeContext);
@@ -19,8 +18,11 @@ function Home() {
   ];
 
   return (
-    <Menu mode="horizontal" theme="dark" items={menuItems} />
-  )
+    <>
+      <Menu mode="horizontal" theme="dark" items={menuItems} />
+      <ListProduct />
+    </>
+  );
 }
 
-export default Home
+export default Home;
